@@ -1,0 +1,9 @@
+{
+  "id": "claude",
+  "connection": "bundled-mcp",
+  "format": "claude-plugin",
+  "manifestPath": ".claude-plugin/plugin.json",
+  "mcpPath": ".mcp.json",
+  "transport": "http",
+  "instructions": "instructions.md"
+}

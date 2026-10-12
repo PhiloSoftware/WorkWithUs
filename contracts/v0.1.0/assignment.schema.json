@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Philo assignment block format 1",
+  "description": "Local authoring convention for a Productive task description; not a Productive API schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "taskType",
+    "briefVersion",
+    "issueState",
+    "ownerPersonId",
+    "objective",
+    "includedScope",
+    "excludedScope",
+    "completionCriteria",
+    "items"
+  ],
+  "properties": {
+    "formatVersion": {
+      "const": 1
+    },
+    "taskType": {
+      "enum": [
+        "information_request",
+        "software_review"
+      ]
+    },
+    "briefVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "issueState": {
+      "enum": [
+        "draft",
+        "issued",
+        "withdrawn"
+      ]
+    },
+    "ownerPersonId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "includedScope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "excludedScope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "completionCriteria": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "prompt",
+          "required"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "expectedBehaviour": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "testContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "softwareVersion",
+        "role",
+        "permittedActions"
+      ],
+      "properties": {
+        "environment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "softwareVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "permittedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "taskType": {
+            "const": "software_review"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "testContext"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "expectedBehaviour"
+              ],
+              "properties": {
+                "expectedBehaviour": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "testContext": {
+            "$ref": "#/properties/testContext"
+          }
+        }
+      }
+    }
+  ]
+}

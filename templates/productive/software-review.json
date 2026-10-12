@@ -1,0 +1,33 @@
+{
+  "formatVersion": 1,
+  "taskType": "software_review",
+  "briefVersion": 1,
+  "issueState": "draft",
+  "ownerPersonId": "REPLACE_WITH_PHILO_OWNER_PERSON_ID",
+  "objective": "Review the current quotation form in staging.",
+  "includedScope": [
+    "Submit and inspect a quotation using the current form."
+  ],
+  "excludedScope": [
+    "Design a new CRM or approve additional scope."
+  ],
+  "completionCriteria": [
+    "Record an observed outcome and evidence or an explicit blocker for every scenario."
+  ],
+  "items": [
+    {
+      "id": "quote-submit",
+      "prompt": "Submit a quotation using the agreed staging test details.",
+      "required": true,
+      "expectedBehaviour": "A quotation is created and a confirmation appears."
+    }
+  ],
+  "testContext": {
+    "environment": "REPLACE_WITH_STAGING_URL",
+    "softwareVersion": "REPLACE_WITH_RELEASE_VERSION",
+    "role": "Customer test account",
+    "permittedActions": [
+      "Create a test quotation in staging. Do not use production or submit a payment."
+    ]
+  }
+}

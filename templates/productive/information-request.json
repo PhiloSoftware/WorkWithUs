@@ -1,0 +1,29 @@
+{
+  "formatVersion": 1,
+  "taskType": "information_request",
+  "briefVersion": 1,
+  "issueState": "draft",
+  "ownerPersonId": "REPLACE_WITH_PHILO_OWNER_PERSON_ID",
+  "objective": "Identify the quotation contact and fields for a fictional customer.",
+  "includedScope": [
+    "Describe the existing quotation workflow."
+  ],
+  "excludedScope": [
+    "Design a new CRM or approve additional scope."
+  ],
+  "completionCriteria": [
+    "Identify the responsible role and requested enquiry fields."
+  ],
+  "items": [
+    {
+      "id": "q-contact",
+      "prompt": "Who handles quotation enquiries?",
+      "required": true
+    },
+    {
+      "id": "q-fields",
+      "prompt": "Which fields do you need on an enquiry?",
+      "required": true
+    }
+  ]
+}

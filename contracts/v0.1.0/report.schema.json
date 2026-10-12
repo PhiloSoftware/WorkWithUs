@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Philo report draft format 1",
+  "description": "Local validation aid before rendering a readable Productive comment. It is not enforced by Productive.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "reportKind",
+    "reportId",
+    "taskId",
+    "personId",
+    "taskType",
+    "briefVersion",
+    "summary",
+    "responses",
+    "outstandingItemIds",
+    "blockers",
+    "scopeProposals"
+  ],
+  "properties": {
+    "formatVersion": {
+      "const": 1
+    },
+    "reportKind": {
+      "enum": [
+        "draft",
+        "submission",
+        "blocker",
+        "scope_proposal"
+      ]
+    },
+    "reportId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "personId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskType": {
+      "enum": [
+        "information_request",
+        "software_review"
+      ]
+    },
+    "briefVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "responses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "itemId",
+          "outcome",
+          "text",
+          "provenance",
+          "customerConfirmed",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outcome": {
+            "enum": [
+              "answered",
+              "unknown",
+              "unavailable",
+              "needs_clarification",
+              "passed",
+              "failed",
+              "blocked",
+              "not_tested"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "provenance": {
+            "enum": [
+              "customer_statement",
+              "ai_deduction",
+              "tool_observation"
+            ]
+          },
+          "customerConfirmed": {
+            "type": "boolean"
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "outstandingItemIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "scopeProposals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "customerConfirmed": {
+      "type": "boolean"
+    },
+    "completeness": {
+      "enum": [
+        "complete",
+        "incomplete"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "reportKind": {
+            "const": "submission"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "customerConfirmed",
+          "completeness"
+        ],
+        "properties": {
+          "customerConfirmed": {
+            "const": true
+          },
+          "completeness": {
+            "$ref": "#/properties/completeness"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskType": {
+            "const": "information_request"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "enum": [
+                    "answered",
+                    "unknown",
+                    "unavailable",
+                    "needs_clarification"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskType": {
+            "const": "software_review"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "enum": [
+                    "passed",
+                    "failed",
+                    "blocked",
+                    "not_tested"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
