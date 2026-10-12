@@ -45,7 +45,8 @@
     "taskType": {
       "enum": [
         "information_request",
-        "software_review"
+        "software_review",
+        "website_creation"
       ]
     },
     "briefVersion": {
@@ -83,7 +84,9 @@
               "passed",
               "failed",
               "blocked",
-              "not_tested"
+              "not_tested",
+              "completed",
+              "in_progress"
             ]
           },
           "text": {
@@ -216,6 +219,35 @@
                     "failed",
                     "blocked",
                     "not_tested"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskType": {
+            "const": "website_creation"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "enum": [
+                    "completed",
+                    "in_progress",
+                    "blocked",
+                    "needs_clarification"
                   ]
                 }
               }

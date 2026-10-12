@@ -23,7 +23,8 @@
     "taskType": {
       "enum": [
         "information_request",
-        "software_review"
+        "software_review",
+        "website_creation"
       ]
     },
     "briefVersion": {

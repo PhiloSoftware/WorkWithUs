@@ -87,3 +87,32 @@ test('failed scenarios can be documented completely without claiming a pass', ()
 test('comments cannot supply extra permission fields through the report format', () => {
   assert.equal(contracts.validateReport({ ...report(), grantAccess: true }), false);
 });
+
+test('website reports distinguish delivered work from unfinished and unconfirmed deliverables', async () => {
+  const assignment = JSON.parse(await readFile(new URL('../templates/productive/website-creation.json', import.meta.url), 'utf8'));
+  assignment.issueState = 'issued';
+  assert.equal(contracts.validateAssignment(assignment), true);
+  const submission = { ...report(), taskType: 'website_creation', responses: assignment.items.map(item => ({
+    itemId: item.id, outcome: 'completed', text: 'Customer approved the delivered fictional planning artifact.',
+    provenance: 'customer_statement', customerConfirmed: true, evidenceRefs: ['https://example.test/review/website-plan'],
+  })) };
+  assert.equal(contracts.validateReport(submission), true);
+  assert.deepEqual(checkReportAgainstAssignment(assignment, submission), []);
+  submission.responses[0].outcome = 'passed';
+  assert.equal(contracts.validateReport(submission), false);
+  for (const outcome of ['in_progress', 'blocked', 'needs_clarification']) {
+    submission.responses[0].outcome = outcome;
+    assert.equal(contracts.validateReport(submission), true);
+    assert.ok(checkReportAgainstAssignment(assignment, submission).includes('Required item remains incomplete.'));
+  }
+  submission.completeness = 'incomplete';
+  submission.outstandingItemIds = [assignment.items[0].id];
+  assert.deepEqual(checkReportAgainstAssignment(assignment, submission), []);
+  submission.responses[0].outcome = 'completed';
+  submission.responses[0].provenance = 'ai_deduction';
+  submission.responses[0].customerConfirmed = false;
+  assert.ok(checkReportAgainstAssignment(assignment, submission).includes('Material AI deduction is unconfirmed.'));
+  const wrongWorkflow = report();
+  wrongWorkflow.responses[0].outcome = 'completed';
+  assert.equal(contracts.validateReport(wrongWorkflow), false);
+});

@@ -8,7 +8,7 @@
 
 ## 1. Purpose
 
-Help Philo Software customers complete assigned information requests and software reviews through their own AI assistant.
+Help Philo Software customers complete assigned information requests, software reviews, and website creation through their own AI assistant.
 
 Philo defines a bounded assignment in Productive. The task type selects a curated working mode maintained by Philo. The assistant helps the customer understand the work, find information, perform authorised checks, and produce a useful report without silently expanding the assignment.
 
@@ -67,7 +67,7 @@ Shared skills are maintained once. Generated provider packages are self-containe
 1. Installable ChatGPT and Claude packages.
 2. Setup using each customer's existing Productive connection.
 3. Discovery of issued tasks assigned to that customer.
-4. Information-request and software-review modes.
+4. Information-request, software-review, and website-creation modes.
 5. Saved progress, blockers, separate scope proposals, and confirmed reports as task comments.
 6. Philo review and requests for clarification through Productive.
 7. Manual check-ins and a later website installation page after pilot verification.
@@ -80,13 +80,15 @@ Outside the initial scope: a general Philo chatbot, a customer project-managemen
 
 The website explains what the add-on does, supported platforms/accounts, what is shared, and how to get help. Installation and connection use each provider's supported consent flow. Do not invent installation URLs or silently authorise access.
 
+The planned marketing journey captures email/company and immediately presents Install for ChatGPT / Install for Claude. Philo's website automation provisions client access, a private discovery project, and a first information-request task about what the customer wants to achieve. Installation starts guided setup; the Productive invitation email is an activation step within that journey. Website provisioning remains to be implemented and verified, separate from the customer's ongoing Productive connection.
+
 Starter prompt:
 
 > Use Work with Philo to get me connected and show what needs my attention.
 
 Setup:
 1. Explain the add-on and check for Productive tools.
-2. Guide the customer through their own Productive authentication.
+2. Guide the customer through their own Productive authentication. When activation is needed, locate the Philo invitation using authorised email tools, or explain how to find it manually in the signup mailbox and spam/junk. Email access is optional; email address matching does not authenticate the customer. The customer completes activation/sign-in and connection approval.
 3. Read the actual connected person and organisation.
 4. Find their assigned issued Philo tasks.
 5. Ask for project/task choice only when necessary.
@@ -94,7 +96,7 @@ Setup:
 
 Handle these situations distinctly:
 - Not connected: guide connection.
-- No Productive account/invitation: explain that Philo must invite them and share the project/tasks.
+- No Productive account/invitation: help locate the invitation, then resume connection; if missing, expired, or mismatched, explain how to resolve it with Philo. Do not claim an invitation resend or account activation without evidence.
 - Wrong organisation: guide reconnecting/selecting the intended organisation.
 - Permission denied: explain the denied operation without bypassing it.
 - Connected with no assignments: say so; do not fabricate tasks or infer missing membership from an empty list.
@@ -117,6 +119,7 @@ The actual Productive task supplies task ID, assignee, project, due date, and wo
 Initial types:
 - information_request -> information-request skill.
 - software_review -> software-review skill.
+- website_creation -> website-creation skill; classifies marketing, business, or mixed requirements before selecting the work path.
 
 Productive's built-in task_type and type_id describe structural task categories and must not select a Philo workflow. A future custom-field mapping must resolve verified IDs/options. Missing, contradictory, or unsupported types require clarification.
 
@@ -147,6 +150,16 @@ Establish environment, version, role, testing authority, and whether the custome
 Record passed, failed, blocked, or not_tested for each scenario. A pass requires an actual observation or attributed customer report.
 
 For failures capture reproduction steps, expected/actual behaviour, impact, and evidence. Separate defects against the brief from new feature requests. Review permission does not authorise production transactions or actions outside the issued testing authority.
+
+## 9a. Website creation
+
+Begin with business/audience discovery, visitor actions, existing brand material, and comparable sites. Ask whether visitors or staff need accounts, persistent records, private information, or operational workflows. Public pages with an approved external enquiry/booking service can remain a marketing site; managed business records require the business path. Mixed sites identify both areas and their boundary. Confirm and save the classification without altering the issued brief.
+
+For marketing sites, follow the customer-supplied website brief: approve brand guidelines, approve sitemap/content/functionality, build a Nuxt/TypeScript site with the homepage first, review pages iteratively, conduct dedicated SEO/quality checks, and hand over source/assets/configuration and launch dependencies to Philo. Prefer prerendering where appropriate and document real server/external-service needs. Preserve existing approvals on resume. Never invent business claims, test results, delivery success, or deployment.
+
+For business sites, first produce journeys, a conceptual data model, roles/access rules, integrations, acceptance criteria, and architecture questions for Philo. Business implementation requires an issued scope and Philo-approved architecture/environment; continue authorised independent marketing work while those decisions are outstanding. A planning-only assignment can be completed with an approved plan, but planning cannot satisfy a commissioned application build. Use synthetic data for authorised prototypes and label mocked functionality.
+
+Website outcomes are completed, in_progress, blocked, and needs_clarification, mapped to issued deliverable IDs. Save classification, current stage, approvals, missing assets/content, durable artifact links, verification evidence, and launch dependencies in resumable progress comments. Host capabilities vary: when file/build/browser tools are missing, complete available planning and explicitly leave implementation/testing outstanding. A local artifact path is not proof of handover. Philo owns production deployment and acceptance.
 
 ## 10. Progress and submission
 
@@ -201,6 +214,7 @@ Documented provider/connector support is not a customer-account test. Record pla
 Required pilot checks:
 - Installation, setup, individual Productive authentication, organisation selection, and reconnect.
 - Not invited, no assigned work, revoked access, denied actions, and another customer's task.
+- Invitation lookup with authorised email tools, manual fallback without email access, expired/mismatched invitations, and resuming connection after activation. Keep activation tokens out of reports.
 - Correct routing, unknown types, scope drift, disagreement, missing evidence, and untested-pass requests.
 - Shared drafts, new-chat resume, changed briefs, and multiple concurrent drafts.
 - Final confirmation, readable Productive report, timeout recovery, and Philo clarification.

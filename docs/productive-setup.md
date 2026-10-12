@@ -6,7 +6,11 @@ Invite the customer to Productive and configure their permission set and project
 
 Productive documents individual MCP connections, AI features enabled, and the Ultimate plan as prerequisites. Confirm these for the pilot organisation. [Productive MCP](https://help.productive.io/en/articles/14817386-mcp-server).
 
-An installed add-on with no Productive account should explain the invitation step. A connected account with no assignments should report that result. Do not infer missing membership solely from an empty search.
+Installation on the website starts guided setup. When account activation is needed, the setup skill helps find the Productive invitation through authorised email tools, or gives manual mailbox/spam search instructions when email access is unavailable or declined. The customer activates their account and approves the Productive connection, then setup rechecks their authenticated identity and continues to their first task. Missing, expired, wrong-recipient, or wrong-organisation invitations require resolution with Philo; finding an email is not successful authentication.
+
+A connected account with no assignments should report that result. Do not infer missing membership solely from an empty search. Email access is optional, and activation links/tokens are not copied into task reports.
+
+The planned website form captures email and company and shows provider installation buttons immediately. Philo's provisioning automation prepares client access, a private discovery project, and an issued information-request task. This website/provisioning automation is not implemented by the skills and still needs building and end-to-end verification. Ongoing task access uses the customer's own Productive connection.
 
 ## Issue a Philo task
 
@@ -14,8 +18,11 @@ Create a Productive task in the correct customer project and assign it to the in
 
 - [Information request example](../templates/productive/information-request.json)
 - [Software review example](../templates/productive/software-review.json)
+- [Website creation example](../templates/productive/website-creation.json)
 
 Replace the example ownerPersonId with the actual Philo reviewer ID and customise all content. Keep issueState draft until the brief is ready; change it to issued when assigning customer work. Use stable question/scenario IDs. Increment briefVersion and explain changes when revising an issued brief.
+
+The website example explicitly commissions a marketing build or, if business data is needed, a requirements handoff. Narrow it to the intended deliverables before issuing. For a business build, Philo must issue scope, architecture, data boundaries, and permitted environment/actions; customer brand approval does not supply that authority. Website progress uses deliverable IDs and completed/in_progress/blocked/needs_clarification outcomes. Keep source in an accessible repository or archive and link it from intentional task comments.
 
 The description is the initial explicit mapping. No custom field has been created or assumed. Productive's task_type and type_id fields are structural task classifications, not information_request/software_review. A future custom-field mapping must resolve actual field IDs/options and handle conflicts explicitly.
 

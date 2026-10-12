@@ -19,6 +19,12 @@ test('both providers carry the exact shared workflows with resolvable references
     assert.equal(chatgpt.files.get(name), source);
     assert.equal(claude.files.get(name), source);
     assert.equal(chatgpt.files.get(`skills/${skill}/references/working-agreement.md`), claude.files.get(`skills/${skill}/references/working-agreement.md`));
+    for (const reference of catalog.skillReferences?.[skill] ?? []) {
+      const resource = `skills/${skill}/references/${reference}`;
+      const source = (await readFile(path.join(root, 'shared', resource), 'utf8')).replace(/\r\n/g, '\n');
+      assert.equal(chatgpt.files.get(resource), source);
+      assert.equal(claude.files.get(resource), source);
+    }
   }
   assert.ok(chatgpt.files.has('plugin.json'));
   assert.ok(claude.files.has('.claude-plugin/plugin.json'));
@@ -62,6 +68,7 @@ test('package selection ignores unrelated files, even inside a skill directory',
   await cp(path.join(root, 'providers'), path.join(isolated, 'providers'), { recursive: true });
   await writeFile(path.join(isolated, 'shared/skills/setup/.env'), 'INTERNAL_TEST_SENTINEL');
   await writeFile(path.join(isolated, 'shared/skills/setup/customer-notes.md'), 'PRIVATE_TEST_SENTINEL');
+  await writeFile(path.join(isolated, 'shared/skills/website-creation/references/customer-notes.md'), 'PRIVATE_TEST_SENTINEL');
   const result = await createPackage(isolated, 'claude');
   assert.ok(![...result.files.values()].some(content => /INTERNAL_TEST_SENTINEL|PRIVATE_TEST_SENTINEL/.test(content)));
   assert.ok([...result.files.keys()].every(name => name === '.claude-plugin/plugin.json' || name === '.mcp.json' || name === 'README.md' || name.startsWith('skills/')));
@@ -78,6 +85,16 @@ test('unknown workflow references fail the build before distribution', async () 
 test('reference validation detects missing files and escapes from the package', () => {
   assert.throws(() => validateLinks(new Map([['skills/setup/SKILL.md', '[missing](references/missing.md)']])), /Broken package link/);
   assert.throws(() => validateLinks(new Map([['README.md', '[outside](../spec.md)']])), /Broken package link/);
+});
+
+test('skill reference allowlists reject paths outside the skill', async () => {
+  const isolated = await mkdtemp(path.join(os.tmpdir(), 'philo-package-resources-'));
+  await cp(path.join(root, 'shared'), path.join(isolated, 'shared'), { recursive: true });
+  await cp(path.join(root, 'providers'), path.join(isolated, 'providers'), { recursive: true });
+  const metadata = JSON.parse(await readFile(path.join(isolated, 'shared/plugin.json'), 'utf8'));
+  metadata.skillReferences['website-creation'] = ['../../../private.md'];
+  await writeFile(path.join(isolated, 'shared/plugin.json'), JSON.stringify(metadata));
+  await assert.rejects(createPackage(isolated, 'chatgpt'), /Invalid skill reference allowlist/);
 });
 
 test('rebuilds are deterministic and refuse stale or unexpected output files', async () => {

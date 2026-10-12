@@ -1,0 +1,39 @@
+{
+  "formatVersion": 1,
+  "taskType": "website_creation",
+  "briefVersion": 1,
+  "issueState": "draft",
+  "ownerPersonId": "REPLACE_WITH_PHILO_OWNER_PERSON_ID",
+  "objective": "Classify website needs and prepare a Nuxt marketing website for Philo production review, or a business-site requirements handoff if persistent business data is needed.",
+  "includedScope": [
+    "Discover the business, audience, brand, and website behaviours.",
+    "For marketing, agree brand and sitemap, build and review a Nuxt site, and deliver source and verification evidence.",
+    "For business or mixed sites, document data, users, workflows, and architecture questions for Philo; application implementation requires a revised issued brief."
+  ],
+  "excludedScope": [
+    "Live deployment or changes to production services.",
+    "Business backend, database, authentication implementation, or paid-service provisioning without Philo scope and architecture approval."
+  ],
+  "completionCriteria": [
+    "Customer confirms the website classification and requirements.",
+    "The deliverables for the selected path are approved and accessible to Philo, with outstanding work and launch dependencies explicit.",
+    "A business-site plan is labelled as a planning handoff, not a built application."
+  ],
+  "items": [
+    {
+      "id": "site-classification",
+      "prompt": "Confirm site purpose, visitor actions, marketing/business/mixed classification, and reasons.",
+      "required": true
+    },
+    {
+      "id": "site-plan",
+      "prompt": "For marketing, approve the brand guideline, sitemap, content, and integrations. For business/mixed, confirm journeys, data model, role matrix, and Philo architecture questions.",
+      "required": true
+    },
+    {
+      "id": "site-delivery",
+      "prompt": "For marketing, deliver reviewed Nuxt source, assets, observed quality checks, and launch checklist. For business/mixed, deliver the requirements/architecture handoff and explicitly list unimplemented work; no business build is commissioned by this brief.",
+      "required": true
+    }
+  ]
+}

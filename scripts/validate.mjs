@@ -7,12 +7,12 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 try {
   const contracts = await loadContracts(root);
   console.log(`Philo authoring format ${contracts.formatVersion}: assignment and report schemas compiled`);
-  for (const name of ['information-request', 'software-review']) {
+  for (const name of ['information-request', 'software-review', 'website-creation']) {
     const template = JSON.parse(await readFile(new URL(`../templates/productive/${name}.json`, import.meta.url), 'utf8'));
     if (!contracts.validateAssignment(template)) throw new Error(`Invalid ${name} template: ${JSON.stringify(contracts.validateAssignment.errors)}`);
     if (template.issueState !== 'draft') throw new Error(`Example ${name} must remain a draft.`);
   }
-  console.log('Both Productive task templates validated as unissued drafts');
+  console.log('All three Productive task templates validated as unissued drafts');
   for (const provider of await providers(root)) {
     for (const profile of ['productive', 'preview']) {
       const result = await createPackage(root, provider, { profile });

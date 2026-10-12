@@ -31,14 +31,14 @@ export function checkReportAgainstAssignment(assignment, report) {
     if (answered.has(response.itemId)) errors.push('Duplicate response item ID.');
     answered.add(response.itemId);
     if (response.provenance === 'ai_deduction' && !response.customerConfirmed &&
-        ['answered', 'passed', 'failed'].includes(response.outcome)) errors.push('Material AI deduction is unconfirmed.');
+        ['answered', 'passed', 'failed', 'completed'].includes(response.outcome)) errors.push('Material AI deduction is unconfirmed.');
   }
   if (report.outstandingItemIds.some(id => !ids.has(id))) errors.push('Unknown outstanding item.');
   if (report.completeness === 'complete') {
     if (report.outstandingItemIds.length || report.blockers.length) errors.push('Complete report has outstanding work.');
     for (const item of assignment.items.filter(item => item.required)) {
       const response = report.responses.find(value => value.itemId === item.id);
-      if (!response || ['unknown', 'unavailable', 'needs_clarification', 'blocked', 'not_tested'].includes(response.outcome)) {
+      if (!response || ['unknown', 'unavailable', 'needs_clarification', 'blocked', 'not_tested', 'in_progress'].includes(response.outcome)) {
         errors.push('Required item remains incomplete.');
       }
     }

@@ -1,8 +1,23 @@
 {
   "name": "work-with-philo",
   "displayName": "Work with Philo",
-  "version": "0.1.0-alpha.2",
-  "description": "Complete Philo information requests and software reviews with guided workflows that preserve the assigned scope.",
-  "author": { "name": "Philo Software" },
-  "skills": ["setup", "work-with-philo", "information-request", "software-review", "check-in"]
+  "version": "0.1.0-alpha.3",
+  "description": "Complete Philo information requests, software reviews, and website creation tasks with guided workflows that preserve the assigned scope.",
+  "author": {
+    "name": "Philo Software"
+  },
+  "skills": [
+    "setup",
+    "work-with-philo",
+    "information-request",
+    "software-review",
+    "check-in",
+    "website-creation"
+  ],
+  "skillReferences": {
+    "website-creation": [
+      "marketing-site.md",
+      "business-site.md"
+    ]
+  }
 }

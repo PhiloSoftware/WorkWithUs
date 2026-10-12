@@ -1,7 +1,35 @@
 {
   "formatVersion": 1,
   "types": {
-    "information_request": { "skill": "information-request", "itemKind": "question", "outcomes": ["answered", "unknown", "unavailable", "needs_clarification"] },
-    "software_review": { "skill": "software-review", "itemKind": "scenario", "outcomes": ["passed", "failed", "blocked", "not_tested"] }
+    "information_request": {
+      "skill": "information-request",
+      "itemKind": "question",
+      "outcomes": [
+        "answered",
+        "unknown",
+        "unavailable",
+        "needs_clarification"
+      ]
+    },
+    "software_review": {
+      "skill": "software-review",
+      "itemKind": "scenario",
+      "outcomes": [
+        "passed",
+        "failed",
+        "blocked",
+        "not_tested"
+      ]
+    },
+    "website_creation": {
+      "skill": "website-creation",
+      "itemKind": "deliverable",
+      "outcomes": [
+        "completed",
+        "in_progress",
+        "blocked",
+        "needs_clarification"
+      ]
+    }
   }
 }

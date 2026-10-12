@@ -11,6 +11,7 @@ Route on the explicit Philo taskType using [the registry](references/task-types.
 
 - information_request: load [information-request](../information-request/SKILL.md).
 - software_review: load [software-review](../software-review/SKILL.md).
+- website_creation: load [website-creation](../website-creation/SKILL.md).
 
 Read the selected skill before working. Do not infer the mode from a title, built-in Productive task_type/type_id, or customer preference. Missing, contradictory, or unsupported metadata needs Philo clarification.
 

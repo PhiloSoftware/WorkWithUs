@@ -67,6 +67,13 @@ export async function createPackage(root, provider, { profile = 'productive' } =
   for (const workflow of Object.values(registry.types)) {
     if (!metadata.skills.includes(workflow.skill)) throw new Error(`Task type references missing skill: ${workflow.skill}`);
   }
+  const skillReferences = metadata.skillReferences ?? {};
+  for (const [skill, names] of Object.entries(skillReferences)) {
+    if (!metadata.skills.includes(skill) || !Array.isArray(names) ||
+        new Set(names).size !== names.length || names.some(name => !/^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/.test(name))) {
+      throw new Error(`Invalid skill reference allowlist: ${skill}`);
+    }
+  }
 
   const files = new Map();
   const add = (name, content) => {
@@ -107,9 +114,12 @@ export async function createPackage(root, provider, { profile = 'productive' } =
     for (const reference of references) add(`skills/${skill}/references/${reference}`, await read(root, `shared/references/${reference}`));
     add(`skills/${skill}/references/provider.md`, providerInstructions);
     add(`skills/${skill}/references/task-types.json`, json(registry));
+    for (const reference of skillReferences[skill] ?? []) {
+      add(`skills/${skill}/references/${reference}`, await read(root, `shared/skills/${skill}/references/${reference}`));
+    }
   }
   if (adapter.onboardingSkill && !files.has(adapter.onboardingSkill.replace(/^\.\//, ''))) throw new Error('Onboarding skill is not packaged.');
-  add('README.md', `# ${metadata.displayName}\n\nVersion ${metadata.version}; ${provider}; ${profile} build.\n\n${buildNotice}\n\nStart with: "Use Work with Philo to get me connected and show what needs my attention."\n\nThe guided workflows cover information requests and software reviews. New ideas stay separate from the issued assignment. Customers review reports before submission, and Philo decides acceptance. Automatic reminders are not enabled. This is a private development preview, not a public release.\n`);
+  add('README.md', `# ${metadata.displayName}\n\nVersion ${metadata.version}; ${provider}; ${profile} build.\n\n${buildNotice}\n\nStart with: "Use Work with Philo to get me connected and show what needs my attention."\n\nThe guided workflows cover information requests, software reviews, and website creation. Website creation distinguishes a Nuxt marketing build from business data/workflow planning and authorised implementation. New ideas stay separate from the issued assignment. Customers review reports before submission, and Philo decides acceptance. Automatic reminders are not enabled. This is a private development preview, not a public release.\n`);
   validateLinks(files);
   return { files, provider, profile, version: metadata.version, name: metadata.name, formatVersion: registry.formatVersion };
 }
