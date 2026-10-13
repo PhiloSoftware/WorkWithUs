@@ -1,7 +1,8 @@
-name: Validate plugin packages
+name: Build plugin packages
 on:
   push:
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -15,7 +16,21 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run package
+      - name: Read package version
+        id: version
+        shell: pwsh
+        run: |
+          $version = (Get-Content shared/plugin.json -Raw | ConvertFrom-Json).version
+          "version=$version" >> $env:GITHUB_OUTPUT
       - uses: actions/upload-artifact@v4
         with:
-          name: work-with-philo-productive
-          path: dist/productive/*.zip
+          name: work-with-philo-chatgpt-${{ steps.version.outputs.version }}
+          path: dist/productive/work-with-philo-chatgpt-${{ steps.version.outputs.version }}-productive.zip
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: work-with-philo-claude-${{ steps.version.outputs.version }}
+          path: dist/productive/work-with-philo-claude-${{ steps.version.outputs.version }}-productive.zip
+          retention-days: 30
+          if-no-files-found: error

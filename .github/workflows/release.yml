@@ -1,0 +1,70 @@
+name: Publish plugin release
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag, for example v0.1.0'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plugin-releases
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check release version
+        id: version
+        shell: pwsh
+        run: node scripts/release.mjs check "$env:RELEASE_TAG"
+      - run: npm ci --ignore-scripts
+      - name: Validate, test, and package both providers
+        run: npm run package
+      - name: Prepare stable download filenames and checksums
+        run: node scripts/release.mjs stage "$env:RELEASE_TAG"
+      - name: Publish complete release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          IS_PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $assets = @('dist/release/work-with-philo-chatgpt.zip', 'dist/release/work-with-philo-claude.zip', 'dist/release/SHA256SUMS.txt')
+          $existing = gh release view "$env:RELEASE_TAG" --json isDraft 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            if (-not ($existing | ConvertFrom-Json).isDraft) { throw 'This version is already published. Publish changes with a new version and tag.' }
+            gh release upload "$env:RELEASE_TAG" @assets --clobber
+          } else {
+            $arguments = @('release', 'create', $env:RELEASE_TAG) + $assets + @('--draft', '--verify-tag', '--title', "Work with Philo $env:RELEASE_TAG", '--generate-notes')
+            if ($env:IS_PRERELEASE -eq 'true') { $arguments += '--prerelease' }
+            gh @arguments
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Release asset upload failed; the release has not been published.' }
+          $publishedAssets = gh release view "$env:RELEASE_TAG" --json assets --jq '.assets[].name'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not verify uploaded assets.' }
+          foreach ($asset in $assets) {
+            if ([IO.Path]::GetFileName($asset) -notin $publishedAssets) { throw "Missing release asset: $asset" }
+          }
+          $latest = if ($env:IS_PRERELEASE -eq 'true') { '--latest=false' } else { '--latest' }
+          gh release edit "$env:RELEASE_TAG" --draft=false $latest
+          if ($LASTEXITCODE -ne 0) { throw 'Could not publish the completed release.' }

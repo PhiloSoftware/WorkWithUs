@@ -103,7 +103,7 @@ export async function createPackage(root, provider, { profile = 'productive' } =
 
   const buildNotice = profile === 'preview'
     ? 'This is a disconnected rehearsal build. Do not use live Productive tools in this profile. Work only from an explicitly supplied sample brief and label all output unsaved rehearsal work. Install the Productive build to work with live assignments.'
-    : 'Use the customer-owned Productive connection described below. No separate Philo service or login is required. Verify connection and identity before reading tasks; installing this package does not grant Productive access. Customer-account installation and permissions still require pilot verification.';
+    : 'Use the customer-owned Productive connection described below. No separate Philo service or login is required. Verify connection and identity before reading tasks; installing this package does not grant Productive access.';
   const providerInstructions = `# Build availability\n\n${buildNotice}\n\n${await read(root, `providers/${provider}/${adapter.instructions}`)}`;
   const references = ['working-agreement.md', 'tools.md', 'assignment-format.md'];
   for (const skill of metadata.skills) {
@@ -119,7 +119,7 @@ export async function createPackage(root, provider, { profile = 'productive' } =
     }
   }
   if (adapter.onboardingSkill && !files.has(adapter.onboardingSkill.replace(/^\.\//, ''))) throw new Error('Onboarding skill is not packaged.');
-  add('README.md', `# ${metadata.displayName}\n\nVersion ${metadata.version}; ${provider}; ${profile} build.\n\n${buildNotice}\n\nStart with: "Use Work with Philo to get me connected and show what needs my attention."\n\nThe guided workflows cover information requests, software reviews, and website creation. Website creation distinguishes a Nuxt marketing build from business data/workflow planning and authorised implementation. New ideas stay separate from the issued assignment. Customers review reports before submission, and Philo decides acceptance. Automatic reminders are not enabled. This is a private development preview, not a public release.\n`);
+  add('README.md', `# ${metadata.displayName}\n\nVersion ${metadata.version}; ${provider}; ${profile} build.\n\n${buildNotice}\n\nStart with: "Use Work with Philo to get me connected and show what needs my attention."\n\nThe guided workflows cover information requests, software reviews, and website creation. Website creation distinguishes a Nuxt marketing build from business data/workflow planning and authorised implementation. New ideas stay separate from the issued assignment. Customers review reports before submission, and Philo decides acceptance. Automatic reminders are not enabled. For installation and updates, use the downloads and instructions at https://www.philo.co.nz/connect-your-ai.\n`);
   validateLinks(files);
   return { files, provider, profile, version: metadata.version, name: metadata.name, formatVersion: registry.formatVersion };
 }
