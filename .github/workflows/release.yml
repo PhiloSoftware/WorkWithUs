@@ -55,7 +55,7 @@ jobs:
             if (-not ($existing | ConvertFrom-Json).isDraft) { throw 'This version is already published. Publish changes with a new version and tag.' }
             gh release upload "$env:RELEASE_TAG" @assets --clobber
           } else {
-            $arguments = @('release', 'create', $env:RELEASE_TAG) + $assets + @('--draft', '--verify-tag', '--title', "Work with Philo $env:RELEASE_TAG", '--generate-notes')
+            $arguments = @('release', 'create', $env:RELEASE_TAG) + $assets + @('--draft', '--verify-tag', '--title', "Philo Software's AI add-on $env:RELEASE_TAG", '--generate-notes')
             if ($env:IS_PRERELEASE -eq 'true') { $arguments += '--prerelease' }
             gh @arguments
           }

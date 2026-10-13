@@ -88,7 +88,7 @@ export async function createPackage(root, provider, { profile = 'productive' } =
   if (adapter.format === 'agent-plugins') {
     if (adapter.manifestPath !== 'plugin.json' || adapter.connection !== 'existing-app') throw new Error('Invalid Agent Plugins adapter.');
     manifest.$schema = 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
-    manifest.extensions = { 'com.openai': { onboardingSkill: adapter.onboardingSkill } };
+    manifest.extensions = { 'com.openai': { onboardingSkill: adapter.onboardingSkill, interface: { displayName: metadata.displayName } } };
   } else if (adapter.format === 'claude-plugin') {
     if (adapter.manifestPath !== '.claude-plugin/plugin.json' || adapter.mcpPath !== '.mcp.json' || adapter.transport !== 'http' || adapter.connection !== 'bundled-mcp') throw new Error('Invalid Claude adapter.');
     manifest.displayName = metadata.displayName;
@@ -119,7 +119,7 @@ export async function createPackage(root, provider, { profile = 'productive' } =
     }
   }
   if (adapter.onboardingSkill && !files.has(adapter.onboardingSkill.replace(/^\.\//, ''))) throw new Error('Onboarding skill is not packaged.');
-  add('README.md', `# ${metadata.displayName}\n\nVersion ${metadata.version}; ${provider}; ${profile} build.\n\n${buildNotice}\n\nStart with: "Use Work with Philo to get me connected and show what needs my attention."\n\nThe guided workflows cover information requests, software reviews, and website creation. Website creation distinguishes a Nuxt marketing build from business data/workflow planning and authorised implementation. New ideas stay separate from the issued assignment. Customers review reports before submission, and Philo decides acceptance. Automatic reminders are not enabled. For installation and updates, use the downloads and instructions at https://www.philo.co.nz/connect-your-ai.\n`);
+  add('README.md', `# ${metadata.displayName}\n\nVersion ${metadata.version}; ${provider}; ${profile} build.\n\n${buildNotice}\n\nStart with: "Use Philo Software's AI add-on to get me connected and show what needs my attention."\n\nThe guided workflows cover information requests, software reviews, and website creation. Website creation distinguishes a Nuxt marketing build from business data/workflow planning and authorised implementation. New ideas stay separate from the issued assignment. Customers review reports before submission, and Philo decides acceptance. Automatic reminders are not enabled. For installation and updates, use the downloads and instructions at https://www.philo.co.nz/connect-your-ai.\n`);
   validateLinks(files);
   return { files, provider, profile, version: metadata.version, name: metadata.name, formatVersion: registry.formatVersion };
 }

@@ -6,6 +6,8 @@ This package does not declare a guessed registered app ID or create a second Pro
 
 If activation is needed, follow the setup skill's invitation lookup or manual email instructions, then resume connection. Philo provisions the account and project/task access. Installing the add-on does not create an account or grant access. An empty task list alone does not prove a missing invitation.
 
-The package declares the setup skill. Fallback prompt: "Use Work with Philo to get me connected and show what needs my attention."
+The package declares the setup skill. Fallback prompt: "Use Philo Software's AI add-on to get me connected and show what needs my attention."
+
+In customer-facing explanations, call this product "Philo Software's AI add-on" and describe Productive as "Philo's project tracking software". Use the actual Productive app name when needed to identify the connection in the provider UI or confirm the service receiving account access; never hide who the customer is authorising.
 
 Never request passwords, tokens, or staff credentials in chat. Automatic reminders are not enabled; offer manual check-ins.

@@ -1,4 +1,4 @@
-# Work with Philo
+# Philo Software's AI add-on
 
 Philo assigns a task in Productive. The customer's own ChatGPT or Claude uses a Philo-maintained skill to guide them through that task, preserve its scope, and return a useful report.
 
@@ -6,7 +6,7 @@ Philo assigns a task in Productive. The customer's own ChatGPT or Claude uses a 
 
 ## Current build
 
-Version 0.1.0 contains six shared skills: setup, task selection/resume, information requests, software reviews, website creation, and manual check-ins.
+Version 0.1.1 contains six shared skills: setup, task selection/resume, information requests, software reviews, website creation, and manual check-ins.
 
 - ChatGPT uses the customer's existing Productive app connection.
 - Claude includes Productive's remote MCP endpoint and uses the customer's Productive authentication.
@@ -51,8 +51,8 @@ npm.cmd run package
 
 This validates, tests, builds, and archives both Productive packages:
 
-- dist/productive/work-with-philo-chatgpt-0.1.0-productive.zip
-- dist/productive/work-with-philo-claude-0.1.0-productive.zip
+- dist/productive/work-with-philo-chatgpt-0.1.1-productive.zip
+- dist/productive/work-with-philo-claude-0.1.1-productive.zip
 
 Upload only the provider ZIP or its work-with-philo directory. Never distribute the repository or the entire dist directory.
 
@@ -104,7 +104,7 @@ The old connected/custom-endpoint build profile is removed. Current builds need 
 
 ## First customer journey
 
-Use: **Use Work with Philo to get me connected and show what needs my attention.**
+Use: **Use Philo Software's AI add-on to get me connected and show what needs my attention.**
 
 Connect the customer's own Productive account, select the correct organisation, and find an assigned task containing an issued Philo brief. The task type selects the skill. Progress is saved with the customer's agreement; the final report is shown for confirmation before posting.
 

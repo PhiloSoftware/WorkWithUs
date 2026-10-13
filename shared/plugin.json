@@ -1,7 +1,7 @@
 {
   "name": "work-with-philo",
-  "displayName": "Work with Philo",
-  "version": "0.1.0",
+  "displayName": "Philo Software's AI add-on",
+  "version": "0.1.1",
   "description": "Complete Philo information requests, software reviews, and website creation tasks with guided workflows that preserve the assigned scope.",
   "author": {
     "name": "Philo Software"
